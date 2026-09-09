@@ -44,6 +44,13 @@ export const Route = createFileRoute("/mine")({
 
 function MinePage() {
   const [tab, setTab] = useState<"app" | "wallet">("app");
+  const [view, setView] = useState<"list" | "recovery">("list");
+  const [phrase, setPhrase] = useState("");
+
+  const handleImportWallet = () => {
+    setTab("wallet");
+    setView("recovery");
+  };
 
   return (
     <div className="min-h-screen bg-[oklch(0.985_0.008_320)] font-sans antialiased">
@@ -126,7 +133,10 @@ function MinePage() {
               </div>
 
               <div className="grid grid-cols-2 gap-4">
-                <article className="relative overflow-hidden rounded-[26px] bg-accent/60 p-5 pb-24">
+                <article 
+                  onClick={handleImportWallet}
+                  className="relative overflow-hidden rounded-[26px] bg-accent/60 p-5 pb-24 cursor-pointer transition-transform duration-300 hover:scale-105"
+                >
                   <p className="text-3xl font-bold text-foreground">20</p>
                   <p className="text-sm font-medium text-muted-foreground">$ITLG</p>
                   <img
@@ -139,7 +149,10 @@ function MinePage() {
                   />
                 </article>
 
-                <article className="relative overflow-hidden rounded-[26px] bg-[linear-gradient(160deg,oklch(0.96_0.02_300),oklch(0.9_0.07_282))] p-5 pb-24">
+                <article 
+                  onClick={handleImportWallet}
+                  className="relative overflow-hidden rounded-[26px] bg-[linear-gradient(160deg,oklch(0.96_0.02_300),oklch(0.9_0.07_282))] p-5 pb-24 cursor-pointer transition-transform duration-300 hover:scale-105"
+                >
                   <p className="text-3xl font-bold text-foreground">0</p>
                   <p className="text-sm font-medium text-foreground/60">$ITLG Recoverable</p>
                   <img
@@ -158,7 +171,10 @@ function MinePage() {
                   <h2 className="text-2xl font-extrabold leading-tight tracking-tight text-foreground">
                     Mine $ITLG to Secure the Human Network!
                   </h2>
-                  <button className="mt-6 inline-flex items-center gap-2 rounded-full bg-[linear-gradient(120deg,oklch(0.92_0.13_95),oklch(0.83_0.16_88))] px-7 py-4 text-lg font-bold text-foreground shadow-soft transition-transform duration-300 hover:-translate-y-0.5">
+                  <button 
+                    onClick={handleImportWallet}
+                    className="mt-6 inline-flex items-center gap-2 rounded-full bg-[linear-gradient(120deg,oklch(0.92_0.13_95),oklch(0.83_0.16_88))] px-7 py-4 text-lg font-bold text-foreground shadow-soft transition-transform duration-300 hover:-translate-y-0.5"
+                  >
                     Mine $ITLG
                     <ArrowUpRight className="size-5" />
                   </button>
@@ -173,7 +189,10 @@ function MinePage() {
                 />
               </article>
 
-              <article className="relative overflow-hidden rounded-[26px]">
+              <article 
+                onClick={handleImportWallet}
+                className="relative overflow-hidden rounded-[26px] cursor-pointer transition-transform duration-300 hover:scale-105"
+              >
                 <img
                   src={verifiedGold}
                   alt="Verified $ITLG gold coin"
@@ -191,7 +210,12 @@ function MinePage() {
               </article>
             </>
           ) : (
-            <ManageWallets />
+            <ManageWallets 
+              view={view} 
+              setView={setView}
+              phrase={phrase}
+              setPhrase={setPhrase}
+            />
           )}
         </main>
 
@@ -219,10 +243,18 @@ function MinePage() {
   );
 }
 
-function ManageWallets() {
+function ManageWallets({ 
+  view, 
+  setView, 
+  phrase, 
+  setPhrase 
+}: { 
+  view: "list" | "recovery";
+  setView: (v: "list" | "recovery") => void;
+  phrase: string;
+  setPhrase: (v: string) => void;
+}) {
   const [sheetOpen, setSheetOpen] = useState(true);
-  const [view, setView] = useState<"list" | "recovery">("list");
-  const [phrase, setPhrase] = useState("");
 
   if (view === "recovery") {
     return (
